@@ -1,6 +1,8 @@
 package model
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"golang.org/x/crypto/bcrypt"
+)
 
 // defining a model struct
 type User struct {
@@ -16,10 +18,17 @@ func Register(user User) (User, error) {
 	encrypted, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
 
 	// overriding the values
-	user.IsEnabled = false
+	user.IsEnabled = true
 	user.Password = string(encrypted)
 
 	// creating the user
 	tx := DB.Create(&user)
+	return user, tx.Error
+}
+
+func GetUserByEmail(email string) (User, error) {
+	// getting the user form the db with the specified email
+	var user User
+	tx := DB.Where("email = ?", email).First(&user)
 	return user, tx.Error
 }

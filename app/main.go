@@ -31,7 +31,7 @@ func main() {
 
 	// specifying the login system endpoints
 	r.POST("/api/v1/register", controller.Register)
-	r.POST("/api/v1/login")
+	r.POST("/api/v1/login", controller.Login)
 	r.POST("/api/v1/logout")
 
 	// running the router
