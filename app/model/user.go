@@ -1,6 +1,8 @@
 package model
 
 import (
+	"regexp"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -11,6 +13,47 @@ type User struct {
 	Email     string `json:"email" gorm:"not null;unique"`
 	Password  string `json:"-" gorm:"not null"`
 	IsEnabled bool   `json:"is_enabled" gorm:"not null"`
+}
+
+func (user User) Validate() (bool, string) {
+	// if the length of the username is less than 8 characters
+	if len(user.Name) < 8 {
+		return false, "Your name has to be at least 8 characters long."
+	}
+
+	// if the length of the username is more than 64 characters
+	if len(user.Name) > 64 {
+		return false, "The length of your name should be maximum of 64 characters long."
+	}
+
+	// creating the regexp for the email validation
+	r, _ := regexp.Compile("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")
+
+	// validating the email
+	if !r.MatchString(user.Email) {
+		return false, "Please provide a valid email address!"
+	}
+
+	// if the user is valid
+	return true, ""
+}
+
+func ExistsByEmail(email string) bool {
+	// getting the user from the db
+	user, err := GetUserByEmail(email)
+
+	// if there's an error, the user does not exist
+	if err != nil {
+		return false
+	}
+
+	// if the id is 0, the user does not exist
+	if user.Id == 0 {
+		return false
+	}
+
+	// the user does exist
+	return true
 }
 
 func Register(user User) (User, error) {

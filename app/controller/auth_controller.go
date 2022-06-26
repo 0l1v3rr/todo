@@ -24,6 +24,23 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	// validating the user
+	ok, msg := user.Validate()
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": msg,
+		})
+		return
+	}
+
+	// checking if the email is already in the db
+	exists := model.ExistsByEmail(user.Email)
+	if exists {
+		c.JSON(http.StatusConflict, gin.H{
+			"error": "This email is already registered.",
+		})
+	}
+
 	// creating the user with the model
 	created, err := model.Register(user)
 	if err != nil {
@@ -156,7 +173,7 @@ func Logout(c *gin.Context) {
 	c.SetCookie(
 		"jwt",
 		"",
-		-3600, // 30 days
+		-3600,
 		"/",
 		"localhost",
 		false,
