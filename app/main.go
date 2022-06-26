@@ -39,10 +39,11 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	// specifying the login system endpoints
+	// specifying the user endpoints
+	r.GET("/api/v1/user", controller.GetLoggedInUser)
 	r.POST("/api/v1/register", controller.Register)
 	r.POST("/api/v1/login", controller.Login)
-	r.POST("/api/v1/logout")
+	r.POST("/api/v1/logout", controller.Logout)
 
 	// running the router
 	r.Run(fmt.Sprintf(":%s", data.Env["PORT"]))
