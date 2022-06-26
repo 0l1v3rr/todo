@@ -6,6 +6,7 @@ import (
 	"github.com/0l1v3rr/todo/app/controller"
 	"github.com/0l1v3rr/todo/app/data"
 	"github.com/0l1v3rr/todo/app/model"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,6 +29,15 @@ func main() {
 
 	// creating the gin router
 	r := gin.Default()
+
+	// using the cors
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
 	// specifying the login system endpoints
 	r.POST("/api/v1/register", controller.Register)
