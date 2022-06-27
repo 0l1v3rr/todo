@@ -29,6 +29,7 @@ func Setup() error {
 
 	// migrating the models
 	DB.AutoMigrate(&User{})
+	DB.AutoMigrate(&Task{})
 
 	return nil
 }
