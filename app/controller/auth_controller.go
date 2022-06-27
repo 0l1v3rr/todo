@@ -126,40 +126,12 @@ func Login(c *gin.Context) {
 }
 
 func GetLoggedInUser(c *gin.Context) {
-	// getting the cookie from the request
-	cookie, err := c.Request.Cookie("jwt")
+	// getting the logged in user
+	user, err := model.GetLoggedInUser(*c)
+
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{
-			"error": "You are not logged in.",
-		})
-		return
-	}
-
-	// parsing the token from the cookie
-	token, err := jwt.ParseWithClaims(
-		cookie.Value,
-		&jwt.StandardClaims{},
-		func(t *jwt.Token) (interface{}, error) {
-			return []byte(data.Env["JWT_SECRET"]), nil
-		},
-	)
-
-	// error handling
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"error": "You are not logged in.",
-		})
-		return
-	}
-
-	// getting the claims from the token
-	claims := token.Claims.(*jwt.StandardClaims)
-
-	// getting the user from the db
-	user, err := model.GetUserByStringId(claims.Issuer)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+			"error": "You are not logged in!",
 		})
 		return
 	}

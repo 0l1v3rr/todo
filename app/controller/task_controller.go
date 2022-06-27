@@ -19,6 +19,8 @@ func GetTasksByListId(c *gin.Context) {
 		return
 	}
 
+	// TODO: check if a user has permission
+
 	// getting the tasks from the db
 	tasks, err := model.GetTasks(listId)
 	if err != nil {
@@ -40,6 +42,8 @@ func GetTaskById(c *gin.Context) {
 		return
 	}
 
+	// TODO: check if the user has permission
+
 	// getting the task from the db
 	task, err := model.GetTaskById(id)
 	if err != nil {
@@ -60,6 +64,9 @@ func ChangeTaskStatus(c *gin.Context) {
 		})
 		return
 	}
+
+	// TODO: check if the task exists
+	// TODO: check if the user has permission
 
 	// changing the IsDone parameter
 	task, err := model.ChangeIsDone(id)
@@ -94,6 +101,7 @@ func CreateTask(c *gin.Context) {
 	}
 
 	// TODO: checking if the list exists
+	// TODO: check if the user has permission
 
 	// creating the task
 	task, err := model.CreateTask(task)
@@ -116,6 +124,9 @@ func EditTask(c *gin.Context) {
 		})
 		return
 	}
+
+	// TODO: check if the task exists
+	// TODO: check if the user has permission
 
 	// binding the task from the body
 	var task model.Task
@@ -161,6 +172,9 @@ func DeleteTask(c *gin.Context) {
 		})
 		return
 	}
+
+	// TODO: check if the task exists
+	// TODO: check if the user has permission
 
 	// deleting the task
 	err = model.DeleteTask(id)

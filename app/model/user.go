@@ -3,6 +3,9 @@ package model
 import (
 	"regexp"
 
+	"github.com/0l1v3rr/todo/app/data"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -90,4 +93,44 @@ func GetUserByEmail(email string) (User, error) {
 	var user User
 	tx := DB.Where("email = ?", email).First(&user)
 	return user, tx.Error
+}
+
+func GetLoggedInUser(c gin.Context) (User, error) {
+	// getting the cookie from the request
+	cookie, err := c.Request.Cookie("jwt")
+	if err != nil {
+		return User{}, err
+	}
+
+	// parsing the token from the cookie
+	token, err := jwt.ParseWithClaims(
+		cookie.Value,
+		&jwt.StandardClaims{},
+		func(t *jwt.Token) (interface{}, error) {
+			return []byte(data.Env["JWT_SECRET"]), nil
+		},
+	)
+	if err != nil {
+		return User{}, err
+	}
+
+	// getting the claims from the token
+	claims := token.Claims.(*jwt.StandardClaims)
+
+	// getting the user from the db
+	user, err := GetUserByStringId(claims.Issuer)
+	if err != nil {
+		return User{}, err
+	}
+
+	// if the user is logged in
+	return user, nil
+}
+
+func IsLoggedIn(c gin.Context) bool {
+	// getting the logged in user
+	_, err := GetLoggedInUser(c)
+
+	// if the error is nil, the user is logged in
+	return err == nil
 }
