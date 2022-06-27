@@ -14,9 +14,29 @@ type Task struct {
 	CreatedById int       `json:"created_by_id" gorm:"not null"`
 	Title       string    `json:"title" gorm:"not null"`
 	Url         string    `json:"url" gorm:"not null"`
-	Description string    `json:"description;omitempty"`
+	Description string    `json:"description"`
 	IsDone      bool      `json:"is_done" gorm:"not null"`
 	CreatedAt   time.Time `json:"created_at" gorm:"not null"`
+}
+
+func (task Task) Validate() (bool, string) {
+	// if the title is less than 3 characters
+	if len(task.Title) < 3 {
+		return false, "The title has to be at least 3 characters long."
+	}
+
+	// if the title is too long
+	if len(task.Title) > 32 {
+		return false, "The title can be maximum 32 characters long."
+	}
+
+	// if the description is too long
+	if len(task.Description) > 256 {
+		return false, "The description can be maximum 256 characters long."
+	}
+
+	// if the task is valid
+	return true, ""
 }
 
 func GetTasks(listId int) ([]Task, error) {

@@ -39,11 +39,19 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	// specifying the user endpoints
+	// user endpoints
 	r.GET("/api/v1/user", controller.GetLoggedInUser)
 	r.POST("/api/v1/register", controller.Register)
 	r.POST("/api/v1/login", controller.Login)
 	r.POST("/api/v1/logout", controller.Logout)
+
+	// task enpoints
+	r.GET("/api/v1/tasks/list/:listId", controller.GetTasksByListId)
+	r.GET("/api/v1/tasks/:id", controller.GetTaskById)
+	r.POST("/api/v1/tasks", controller.CreateTask)
+	r.PATCH("/api/v1/tasks/:id", controller.ChangeTaskStatus)
+	r.PUT("/api/v1/tasks/:id", controller.EditTask)
+	r.DELETE("/api/v1/tasks/:id", controller.DeleteTask)
 
 	// running the router
 	r.Run(fmt.Sprintf(":%s", data.Env["PORT"]))

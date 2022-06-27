@@ -26,5 +26,5 @@ func CreateUrlByTitle(t string) string {
 		res += string(t[i])
 	}
 
-	return res
+	return strings.ToLower(res)
 }
