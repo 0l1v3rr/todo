@@ -19,7 +19,7 @@ func GetTasksByListId(c *gin.Context) {
 		return
 	}
 
-	// TODO: check if a user has permission
+	// TODO: check if a user has permission to view the list
 
 	// getting the tasks from the db
 	tasks, err := model.GetTasks(listId)
@@ -42,15 +42,16 @@ func GetTaskById(c *gin.Context) {
 		return
 	}
 
-	// TODO: check if the user has permission
-
-	// getting the task from the db
-	task, err := model.GetTaskById(id)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+	// checking if the task exists, and getting the task from the db
+	task, exists := model.TaskExists(id)
+	if !exists {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Task with this ID does not exist.",
 		})
+		return
 	}
+
+	// TODO: check if the user has permission to view the list the task is in
 
 	c.JSON(http.StatusOK, task)
 }
@@ -65,8 +66,31 @@ func ChangeTaskStatus(c *gin.Context) {
 		return
 	}
 
-	// TODO: check if the task exists
-	// TODO: check if the user has permission
+	// checking if the task exists
+	existingTask, exists := model.TaskExists(id)
+	if !exists {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Task with this ID does not exist.",
+		})
+		return
+	}
+
+	// checking if the user is logged in
+	user, err := model.GetLoggedInUser(*c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "You are not logged in.",
+		})
+		return
+	}
+
+	// checking if the user has permission
+	if user.Id != existingTask.CreatedById {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "You do not have permission to do this.",
+		})
+		return
+	}
 
 	// changing the IsDone parameter
 	task, err := model.ChangeIsDone(id)
@@ -100,11 +124,23 @@ func CreateTask(c *gin.Context) {
 		return
 	}
 
+	// checking if the user is logged in
+	user, err := model.GetLoggedInUser(*c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "You are not logged in.",
+		})
+		return
+	}
+
 	// TODO: checking if the list exists
-	// TODO: check if the user has permission
+	// TODO: check if the user has permission to create in the list
+
+	// changing the CreatedById
+	task.CreatedById = user.Id
 
 	// creating the task
-	task, err := model.CreateTask(task)
+	task, err = model.CreateTask(task)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -125,8 +161,31 @@ func EditTask(c *gin.Context) {
 		return
 	}
 
-	// TODO: check if the task exists
-	// TODO: check if the user has permission
+	// checking if the task exists
+	existingTask, exists := model.TaskExists(id)
+	if !exists {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Task with this ID does not exist.",
+		})
+		return
+	}
+
+	// checking if the user is logged in
+	user, err := model.GetLoggedInUser(*c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "You are not logged in.",
+		})
+		return
+	}
+
+	// checking if the user has permission
+	if user.Id != existingTask.CreatedById {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "You do not have permission to do this.",
+		})
+		return
+	}
 
 	// binding the task from the body
 	var task model.Task
@@ -147,8 +206,9 @@ func EditTask(c *gin.Context) {
 		return
 	}
 
-	// changing the task id
+	// changing the task id and the CreatedById
 	task.Id = id
+	task.CreatedById = user.Id
 
 	// saving the task in the db
 	saved, err := model.EditTask(task)
@@ -173,8 +233,31 @@ func DeleteTask(c *gin.Context) {
 		return
 	}
 
-	// TODO: check if the task exists
-	// TODO: check if the user has permission
+	// checking if the task exists
+	existingTask, exists := model.TaskExists(id)
+	if !exists {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Task with this ID does not exist.",
+		})
+		return
+	}
+
+	// checking if the user is logged in
+	user, err := model.GetLoggedInUser(*c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "You are not logged in.",
+		})
+		return
+	}
+
+	// checking if the user has permission
+	if user.Id != existingTask.CreatedById {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "You do not have permission to do this.",
+		})
+		return
+	}
 
 	// deleting the task
 	err = model.DeleteTask(id)

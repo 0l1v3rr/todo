@@ -64,6 +64,24 @@ func GetTaskById(id int) (Task, error) {
 	return task, nil
 }
 
+func TaskExists(id int) (Task, bool) {
+	// getting the task by id
+	task, err := GetTaskById(id)
+
+	// if the err is not nil, the task doesn't exist
+	if err != nil {
+		return Task{}, false
+	}
+
+	// if the taskId is 0, the task doesn't exist
+	if task.Id == 0 {
+		return Task{}, false
+	}
+
+	// the task exists
+	return task, true
+}
+
 func CreateTask(task Task) (Task, error) {
 	// overriding the necessary values
 	task.Url = fmt.Sprintf("%s-%d", util.CreateUrlByTitle(task.Title), task.Id)
