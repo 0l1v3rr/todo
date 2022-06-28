@@ -11,11 +11,17 @@ import (
 
 // defining a model struct
 type User struct {
-	Id        int    `json:"id" gorm:"primaryKey"`
-	Name      string `json:"name" gorm:"not null"`
-	Email     string `json:"email" gorm:"not null;unique"`
-	Password  string `json:"-" gorm:"not null"`
-	IsEnabled bool   `json:"is_enabled" gorm:"not null"`
+	Id        int    `json:"id" gorm:"primaryKey" example:"1"`
+	Name      string `json:"name" gorm:"not null" example:"John Doe"`
+	Email     string `json:"email" gorm:"not null;unique" example:"johndoe@gmail.com"`
+	Password  string `json:"-" gorm:"not null" example:"secret"`
+	IsEnabled bool   `json:"is_enabled" gorm:"not null" example:"true"`
+}
+
+// defining a LoginUser for the documentation
+type LoginUser struct {
+	Email    string `json:"email" example:"johndoe@gmail.com"`
+	Password string `json:"password" example:"SuperSecret69"`
 }
 
 func (user User) Validate() (bool, string) {

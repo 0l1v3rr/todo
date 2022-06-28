@@ -11,7 +11,7 @@ func CreateUrlByTitle(t string) string {
 
 	// for loop from 0 to the (length of the string)-1
 	for i := 0; i < len(t); i++ {
-		// if the current character is a string, replace it with a -
+		// if the current character is a space, replace it with a -
 		if t[i] == ' ' {
 			res += "-"
 			continue

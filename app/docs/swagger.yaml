@@ -1,0 +1,371 @@
+basePath: /api/v1
+definitions:
+  model.LoginUser:
+    properties:
+      email:
+        example: johndoe@gmail.com
+        type: string
+      password:
+        example: SuperSecret69
+        type: string
+    type: object
+  model.Task:
+    properties:
+      created_at:
+        type: string
+      created_by_id:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      is_done:
+        type: boolean
+      list_id:
+        type: integer
+      title:
+        type: string
+      url:
+        type: string
+    type: object
+  model.User:
+    properties:
+      email:
+        example: johndoe@gmail.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      is_enabled:
+        example: true
+        type: boolean
+      name:
+        example: John Doe
+        type: string
+    type: object
+  util.Error:
+    properties:
+      error:
+        example: An unknown error occurred.
+        type: string
+    type: object
+  util.Success:
+    properties:
+      message:
+        example: Success!
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: oliver.mrakovics@gmail.com
+    url: https://0l1v3rr.github.io
+  description: This is the API of the ToDo application
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Advanced ToDo application
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Logs in a user and saves the JWT in cookies.
+      parameters:
+      - description: User to log in
+        in: body
+        name: user
+        schema:
+          $ref: '#/definitions/model.LoginUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: If the login was successful.
+          schema:
+            $ref: '#/definitions/util.Success'
+        "400":
+          description: If the provided user is not valid.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "403":
+          description: If the password is incorrect or the user is not activated.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "404":
+          description: If the user with the specified email does not exist.
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Login
+      tags:
+      - User endpoints
+  /logout:
+    post:
+      description: Logs out the currently logged-in user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: If the logout was success.
+          schema:
+            $ref: '#/definitions/util.Success'
+      summary: Logout
+      tags:
+      - User endpoints
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user into the database.
+      parameters:
+      - description: User to register
+        in: body
+        name: user
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: If the user has been created successfully.
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: If the provided user is not valid.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "409":
+          description: If the specified email already exists.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "500":
+          description: If there was a server error while creating the user.
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Registration
+      tags:
+      - User endpoints
+  /tasks/{id}:
+    delete:
+      description: Deletes the task
+      parameters:
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/model.Task'
+        "400":
+          description: If the id is not valid.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "401":
+          description: If the user is not logged in.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "403":
+          description: If the user has no permission to do this.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "404":
+          description: If the task does not exist.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "500":
+          description: If there was a db error.
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Delete task
+      tags:
+      - Task endpoints
+    get:
+      description: Returns the task with the specified id
+      parameters:
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Task'
+        "400":
+          description: If the id is not valid.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "404":
+          description: If the task doesn't exist.
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Get tasks
+      tags:
+      - Task endpoints
+    patch:
+      description: Changes the task status to its opposite value
+      parameters:
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/model.Task'
+        "400":
+          description: If the id is not valid.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "401":
+          description: If the user is not logged in.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "403":
+          description: If the user has no permission to do this.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "404":
+          description: If the task doesn't exist.
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Change task status
+      tags:
+      - Task endpoints
+    post:
+      consumes:
+      - application/json
+      description: Creates a new task in the db
+      parameters:
+      - description: Task to create
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/model.Task'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Task'
+        "400":
+          description: If the task is not valid.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "401":
+          description: If the user is not logged in.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "500":
+          description: If there was a db error.
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Create task
+      tags:
+      - Task endpoints
+    put:
+      consumes:
+      - application/json
+      description: Edits the task
+      parameters:
+      - description: Task to create
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/model.Task'
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/model.Task'
+        "400":
+          description: If the task or the id is not valid.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "401":
+          description: If the user is not logged in.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "403":
+          description: If the user has no permission to do this.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "404":
+          description: If the task does not exist.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "500":
+          description: If there was a db error.
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Edit task
+      tags:
+      - Task endpoints
+  /tasks/list/{id}:
+    get:
+      description: Returns all the tasks in the specified list
+      parameters:
+      - description: list ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Task'
+            type: array
+        "400":
+          description: If the id is not valid.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "500":
+          description: If there was a db error..
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Get list tasks
+      tags:
+      - Task endpoints
+  /user:
+    get:
+      description: Returns the currently logged-in user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: If the user is logged in.
+          schema:
+            $ref: '#/definitions/model.User'
+        "401":
+          description: If the user is not logged in.
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Logged In User
+      tags:
+      - User endpoints
+swagger: "2.0"

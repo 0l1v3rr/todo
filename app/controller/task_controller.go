@@ -9,6 +9,15 @@ import (
 	"github.com/gin-gonic/gin/binding"
 )
 
+// @Summary      Get list tasks
+// @Description  Returns all the tasks in the specified list
+// @Tags         Task endpoints
+// @Produce      json
+// @Param 		 id path int true "list ID"
+// @Success      200  {array}   model.Task
+// @Failure      400  {object}  util.Error "If the id is not valid."
+// @Failure      500  {object}  util.Error "If there was a db error.."
+// @Router       /tasks/list/{id} [get]
 func GetTasksByListId(c *gin.Context) {
 	// parsing the listId parameter
 	listId, err := strconv.Atoi(c.Param("listId"))
@@ -32,6 +41,15 @@ func GetTasksByListId(c *gin.Context) {
 	c.JSON(http.StatusOK, tasks)
 }
 
+// @Summary      Get tasks
+// @Description  Returns the task with the specified id
+// @Tags         Task endpoints
+// @Produce      json
+// @Param 		 id path int true "task ID"
+// @Success      200  {object}  model.Task
+// @Failure      400  {object}  util.Error "If the id is not valid."
+// @Failure      404  {object}  util.Error "If the task doesn't exist."
+// @Router       /tasks/{id} [get]
 func GetTaskById(c *gin.Context) {
 	// parsing the id parameter
 	id, err := strconv.Atoi(c.Param("id"))
@@ -56,6 +74,17 @@ func GetTaskById(c *gin.Context) {
 	c.JSON(http.StatusOK, task)
 }
 
+// @Summary      Change task status
+// @Description  Changes the task status to its opposite value
+// @Tags         Task endpoints
+// @Produce      json
+// @Param 		 id path int true "task ID"
+// @Success      202  {object}  model.Task
+// @Failure      400  {object}  util.Error "If the id is not valid."
+// @Failure      401  {object}  util.Error "If the user is not logged in."
+// @Failure      403  {object}  util.Error "If the user has no permission to do this."
+// @Failure      404  {object}  util.Error "If the task doesn't exist."
+// @Router       /tasks/{id} [patch]
 func ChangeTaskStatus(c *gin.Context) {
 	// parsing the id parameter
 	id, err := strconv.Atoi(c.Param("id"))
@@ -104,6 +133,17 @@ func ChangeTaskStatus(c *gin.Context) {
 	c.JSON(http.StatusAccepted, task)
 }
 
+// @Summary      Create task
+// @Description  Creates a new task in the db
+// @Tags         Task endpoints
+// @Accept       json
+// @Produce      json
+// @Param 		 task body model.Task true "Task to create"
+// @Success      201  {object}  model.Task
+// @Failure      400  {object}  util.Error "If the task is not valid."
+// @Failure      401  {object}  util.Error "If the user is not logged in."
+// @Failure      500  {object}  util.Error "If there was a db error."
+// @Router       /tasks/{id} [post]
 func CreateTask(c *gin.Context) {
 	// binding the task from the body
 	var task model.Task
@@ -151,6 +191,20 @@ func CreateTask(c *gin.Context) {
 	c.JSON(http.StatusCreated, task)
 }
 
+// @Summary      Edit task
+// @Description  Edits the task
+// @Tags         Task endpoints
+// @Accept       json
+// @Produce      json
+// @Param 		 task body model.Task true "Task to create"
+// @Param 		 id path int true "task ID"
+// @Success      202  {object}  model.Task
+// @Failure      400  {object}  util.Error "If the task or the id is not valid."
+// @Failure      404  {object}  util.Error "If the task does not exist."
+// @Failure      401  {object}  util.Error "If the user is not logged in."
+// @Failure      403  {object}  util.Error "If the user has no permission to do this."
+// @Failure      500  {object}  util.Error "If there was a db error."
+// @Router       /tasks/{id} [put]
 func EditTask(c *gin.Context) {
 	// parsing the id parameter
 	id, err := strconv.Atoi(c.Param("id"))
@@ -223,6 +277,17 @@ func EditTask(c *gin.Context) {
 	c.JSON(http.StatusAccepted, saved)
 }
 
+// @Summary      Delete task
+// @Description  Deletes the task
+// @Tags         Task endpoints
+// @Param 		 id path int true "task ID"
+// @Success      202  {object}  model.Task
+// @Failure      400  {object}  util.Error "If the id is not valid."
+// @Failure      404  {object}  util.Error "If the task does not exist."
+// @Failure      401  {object}  util.Error "If the user is not logged in."
+// @Failure      403  {object}  util.Error "If the user has no permission to do this."
+// @Failure      500  {object}  util.Error "If there was a db error."
+// @Router       /tasks/{id} [delete]
 func DeleteTask(c *gin.Context) {
 	// parsing the id parameter
 	id, err := strconv.Atoi(c.Param("id"))
