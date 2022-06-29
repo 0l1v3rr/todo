@@ -47,7 +47,7 @@ func GetTasksByListId(c *gin.Context) {
 	// checking if the user has permission to view the list
 	listOwner := model.GetListOwnerId(listId)
 	if user.Id != listOwner {
-		c.JSON(http.StatusForbidden, util.Error{Message: "You do not have the permission to view this list."})
+		c.JSON(http.StatusForbidden, util.Error{Message: "You do not have permission to view this list."})
 		return
 	}
 
@@ -91,7 +91,7 @@ func GetTaskByUrl(c *gin.Context) {
 	// checking if the user has permission to view the list the task is in
 	listOwner := model.GetListOwnerId(task.ListId)
 	if user.Id != listOwner {
-		c.JSON(http.StatusForbidden, util.Error{Message: "You do not have the permission to view this list."})
+		c.JSON(http.StatusForbidden, util.Error{Message: "You do not have permission to view this list."})
 		return
 	}
 
@@ -194,7 +194,7 @@ func CreateTask(c *gin.Context) {
 	// checking if the user has permission to create task in the list
 	listOwner := model.GetListOwnerId(task.ListId)
 	if user.Id != listOwner {
-		c.JSON(http.StatusForbidden, util.Error{Message: "You do not have the permission to create in this list."})
+		c.JSON(http.StatusForbidden, util.Error{Message: "You do not have permission to create in this list."})
 		return
 	}
 

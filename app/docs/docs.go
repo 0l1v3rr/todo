@@ -23,6 +23,112 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/lists/user/{userId}": {
+            "get": {
+                "description": "Returns all the lists the specified user has",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "List endpoints"
+                ],
+                "summary": "Get lists",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.List"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "If the id is not valid.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "If the user is not logged in.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "If the user doesn't have permission to view the list.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "If there was a db error.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/lists/{url}": {
+            "get": {
+                "description": "Returns all the lists the specified user has",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "List endpoints"
+                ],
+                "summary": "Get lists",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "list URL",
+                        "name": "url",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.List"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "If the user is not logged in.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "If the user doesn't have permission to view the list.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "If the list does not exist.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "description": "Logs in a user and saves the JWT in cookies.",
@@ -520,6 +626,31 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.List": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "imageId": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "List"
+                },
+                "ownerId": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "url": {
+                    "type": "string",
+                    "example": "list-1"
+                }
+            }
+        },
         "model.LoginUser": {
             "type": "object",
             "properties": {

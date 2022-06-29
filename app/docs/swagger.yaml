@@ -1,5 +1,23 @@
 basePath: /api/v1
 definitions:
+  model.List:
+    properties:
+      id:
+        example: 1
+        type: integer
+      imageId:
+        example: 1
+        type: integer
+      name:
+        example: List
+        type: string
+      ownerId:
+        example: 1
+        type: integer
+      url:
+        example: list-1
+        type: string
+    type: object
   model.LoginUser:
     properties:
       email:
@@ -75,6 +93,76 @@ info:
   title: Advanced ToDo application
   version: "1.0"
 paths:
+  /lists/{url}:
+    get:
+      description: Returns all the lists the specified user has
+      parameters:
+      - description: list URL
+        in: path
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.List'
+            type: array
+        "401":
+          description: If the user is not logged in.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "403":
+          description: If the user doesn't have permission to view the list.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "404":
+          description: If the list does not exist.
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Get lists
+      tags:
+      - List endpoints
+  /lists/user/{userId}:
+    get:
+      description: Returns all the lists the specified user has
+      parameters:
+      - description: user ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.List'
+            type: array
+        "400":
+          description: If the id is not valid.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "401":
+          description: If the user is not logged in.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "403":
+          description: If the user doesn't have permission to view the list.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "500":
+          description: If there was a db error.
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Get lists
+      tags:
+      - List endpoints
   /login:
     post:
       consumes:
