@@ -17,6 +17,9 @@ import (
 // @Param 		 id path int true "list ID"
 // @Success      200  {array}   model.Task
 // @Failure      400  {object}  util.Error "If the id is not valid."
+// @Failure      401  {object}  util.Error "If the user is not logged in."
+// @Failure      403  {object}  util.Error "If the user doesn't have permission to view the list."
+// @Failure      404  {object}  util.Error "If the list with this id does not exist."
 // @Failure      500  {object}  util.Error "If there was a db error.."
 // @Router       /tasks/list/{id} [get]
 func GetTasksByListId(c *gin.Context) {
@@ -27,7 +30,26 @@ func GetTasksByListId(c *gin.Context) {
 		return
 	}
 
-	// TODO: check if a user has permission to view the list
+	// checking whether the list exists
+	_, exists := model.ListExists(listId)
+	if !exists {
+		c.JSON(http.StatusNotFound, util.Error{Message: "List with this ID does not exist."})
+		return
+	}
+
+	// checking if the user is logged in
+	user, err := model.GetLoggedInUser(*c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, util.Error{Message: "You are not logged in."})
+		return
+	}
+
+	// checking if the user has permission to view the list
+	listOwner := model.GetListOwnerId(listId)
+	if user.Id != listOwner {
+		c.JSON(http.StatusForbidden, util.Error{Message: "You do not have the permission to view this list."})
+		return
+	}
 
 	// getting the tasks from the db
 	tasks, err := model.GetTasks(listId)
@@ -46,6 +68,8 @@ func GetTasksByListId(c *gin.Context) {
 // @Param 		 url path string true "task URL"
 // @Success      200  {object}  model.Task
 // @Failure      404  {object}  util.Error "If the task doesn't exist."
+// @Failure      401  {object}  util.Error "If the user is not logged in."
+// @Failure      403  {object}  util.Error "If the user doesn't have permission to view the list the task is in."
 // @Router       /tasks/{url} [get]
 func GetTaskByUrl(c *gin.Context) {
 	// getting the url from the parameter
@@ -53,11 +77,23 @@ func GetTaskByUrl(c *gin.Context) {
 
 	task, err := model.GetTaskByUrl(url)
 	if err != nil {
-		c.JSON(http.StatusNotFound, util.Error{Message: "Task with this ID does not exist."})
+		c.JSON(http.StatusNotFound, util.Error{Message: "Task with this URL does not exist."})
 		return
 	}
 
-	// TODO: check if the user has permission to view the list the task is in
+	// checking if the user is logged in
+	user, err := model.GetLoggedInUser(*c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, util.Error{Message: "You are not logged in."})
+		return
+	}
+
+	// checking if the user has permission to view the list the task is in
+	listOwner := model.GetListOwnerId(task.ListId)
+	if user.Id != listOwner {
+		c.JSON(http.StatusForbidden, util.Error{Message: "You do not have the permission to view this list."})
+		return
+	}
 
 	c.JSON(http.StatusOK, task)
 }
@@ -121,6 +157,8 @@ func ChangeTaskStatus(c *gin.Context) {
 // @Success      201  {object}  model.Task
 // @Failure      400  {object}  util.Error "If the task is not valid."
 // @Failure      401  {object}  util.Error "If the user is not logged in."
+// @Failure      403  {object}  util.Error "If the user doesn't have permission to create task in the list."
+// @Failure      404  {object}  util.Error "If the list with the specified ID does not exist."
 // @Failure      500  {object}  util.Error "If there was a db error."
 // @Router       /tasks/{id} [post]
 func CreateTask(c *gin.Context) {
@@ -146,8 +184,19 @@ func CreateTask(c *gin.Context) {
 		return
 	}
 
-	// TODO: checking if the list exists
-	// TODO: check if the user has permission to create in the list
+	// checking if the list exists
+	_, exists := model.ListExists(task.ListId)
+	if !exists {
+		c.JSON(http.StatusNotFound, util.Error{Message: "List with this ID does not exist."})
+		return
+	}
+
+	// checking if the user has permission to create task in the list
+	listOwner := model.GetListOwnerId(task.ListId)
+	if user.Id != listOwner {
+		c.JSON(http.StatusForbidden, util.Error{Message: "You do not have the permission to create in this list."})
+		return
+	}
 
 	// changing the CreatedById
 	task.CreatedById = user.Id

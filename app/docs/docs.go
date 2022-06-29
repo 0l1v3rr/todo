@@ -180,6 +180,24 @@ const docTemplate = `{
                             "$ref": "#/definitions/util.Error"
                         }
                     },
+                    "401": {
+                        "description": "If the user is not logged in.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "If the user doesn't have permission to view the list.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "If the list with this id does not exist.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
                     "500": {
                         "description": "If there was a db error..",
                         "schema": {
@@ -297,6 +315,18 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "If the user is not logged in.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "If the user doesn't have permission to create task in the list.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "If the list with the specified ID does not exist.",
                         "schema": {
                             "$ref": "#/definitions/util.Error"
                         }
@@ -439,6 +469,18 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/model.Task"
+                        }
+                    },
+                    "401": {
+                        "description": "If the user is not logged in.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "If the user doesn't have permission to view the list the task is in.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
                         }
                     },
                     "404": {
