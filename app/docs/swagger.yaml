@@ -11,21 +11,29 @@ definitions:
     type: object
   model.Task:
     properties:
-      created_at:
+      createdAt:
+        example: 2022-06-29 13:27
         type: string
-      created_by_id:
+      createdById:
+        example: 1
         type: integer
       description:
+        example: This is a great task!
         type: string
       id:
+        example: 1
         type: integer
-      is_done:
+      isDone:
+        example: true
         type: boolean
-      list_id:
+      listId:
+        example: 1
         type: integer
       title:
+        example: Task
         type: string
       url:
+        example: task-1
         type: string
     type: object
   model.User:
@@ -36,7 +44,7 @@ definitions:
       id:
         example: 1
         type: integer
-      is_enabled:
+      isEnabled:
         example: true
         type: boolean
       name:
@@ -183,32 +191,6 @@ paths:
       summary: Delete task
       tags:
       - Task endpoints
-    get:
-      description: Returns the task with the specified id
-      parameters:
-      - description: task ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.Task'
-        "400":
-          description: If the id is not valid.
-          schema:
-            $ref: '#/definitions/util.Error'
-        "404":
-          description: If the task doesn't exist.
-          schema:
-            $ref: '#/definitions/util.Error'
-      summary: Get tasks
-      tags:
-      - Task endpoints
     patch:
       description: Changes the task status to its opposite value
       parameters:
@@ -320,6 +302,29 @@ paths:
           schema:
             $ref: '#/definitions/util.Error'
       summary: Edit task
+      tags:
+      - Task endpoints
+  /tasks/{url}:
+    get:
+      description: Returns the task with the specified url
+      parameters:
+      - description: task URL
+        in: path
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Task'
+        "404":
+          description: If the task doesn't exist.
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Get tasks by URL
       tags:
       - Task endpoints
   /tasks/list/{id}:

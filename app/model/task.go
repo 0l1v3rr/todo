@@ -9,14 +9,14 @@ import (
 
 // task struct
 type Task struct {
-	Id          int       `json:"id" gorm:"primaryKey"`
-	ListId      int       `json:"list_id" gorm:"not null"`
-	CreatedById int       `json:"created_by_id" gorm:"not null"`
-	Title       string    `json:"title" gorm:"not null"`
-	Url         string    `json:"url" gorm:"not null"`
-	Description string    `json:"description"`
-	IsDone      bool      `json:"is_done" gorm:"not null"`
-	CreatedAt   time.Time `json:"created_at" gorm:"not null"`
+	Id          int       `json:"id" gorm:"primaryKey" example:"1"`
+	ListId      int       `json:"listId" gorm:"not null;column:list_id" example:"1"`
+	CreatedById int       `json:"createdById" gorm:"not null;column:created_by_id" example:"1"`
+	Title       string    `json:"title" gorm:"not null" example:"Task"`
+	Url         string    `json:"url" gorm:"not null;unique" example:"task-1"`
+	Description string    `json:"description" example:"This is a great task!"`
+	IsDone      bool      `json:"isDone" gorm:"not null;column:is_done" example:"true"`
+	CreatedAt   time.Time `json:"createdAt" gorm:"not null;column:created_at" example:"2022-06-29 13:27"`
 }
 
 func (task Task) Validate() (bool, string) {
@@ -57,6 +57,18 @@ func GetTaskById(id int) (Task, error) {
 
 	// getting the task from the db by id
 	tx := DB.Where("id = ?", id).First(&task)
+	if tx.Error != nil {
+		return Task{}, tx.Error
+	}
+
+	return task, nil
+}
+
+func GetTaskByUrl(url string) (Task, error) {
+	var task Task
+
+	// getting the task from the db by url
+	tx := DB.Where("url = ?", url).Find(&task)
 	if tx.Error != nil {
 		return Task{}, tx.Error
 	}

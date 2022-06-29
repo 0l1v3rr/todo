@@ -190,45 +190,6 @@ const docTemplate = `{
             }
         },
         "/tasks/{id}": {
-            "get": {
-                "description": "Returns the task with the specified id",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Task endpoints"
-                ],
-                "summary": "Get tasks",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "task ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.Task"
-                        }
-                    },
-                    "400": {
-                        "description": "If the id is not valid.",
-                        "schema": {
-                            "$ref": "#/definitions/util.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "If the task doesn't exist.",
-                        "schema": {
-                            "$ref": "#/definitions/util.Error"
-                        }
-                    }
-                }
-            },
             "put": {
                 "description": "Edits the task",
                 "consumes": [
@@ -454,6 +415,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/tasks/{url}": {
+            "get": {
+                "description": "Returns the task with the specified url",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task endpoints"
+                ],
+                "summary": "Get tasks by URL",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "task URL",
+                        "name": "url",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Task"
+                        }
+                    },
+                    "404": {
+                        "description": "If the task doesn't exist.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "get": {
                 "description": "Returns the currently logged-in user.",
@@ -498,29 +494,37 @@ const docTemplate = `{
         "model.Task": {
             "type": "object",
             "properties": {
-                "created_at": {
-                    "type": "string"
+                "createdAt": {
+                    "type": "string",
+                    "example": "2022-06-29 13:27"
                 },
-                "created_by_id": {
-                    "type": "integer"
+                "createdById": {
+                    "type": "integer",
+                    "example": 1
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "This is a great task!"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
-                "is_done": {
-                    "type": "boolean"
+                "isDone": {
+                    "type": "boolean",
+                    "example": true
                 },
-                "list_id": {
-                    "type": "integer"
+                "listId": {
+                    "type": "integer",
+                    "example": 1
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Task"
                 },
                 "url": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "task-1"
                 }
             }
         },
@@ -535,7 +539,7 @@ const docTemplate = `{
                     "type": "integer",
                     "example": 1
                 },
-                "is_enabled": {
+                "isEnabled": {
                     "type": "boolean",
                     "example": true
                 },

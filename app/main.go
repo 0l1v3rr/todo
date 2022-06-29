@@ -64,7 +64,7 @@ func main() {
 
 	// task enpoints
 	r.GET("/api/v1/tasks/list/:listId", controller.GetTasksByListId)
-	r.GET("/api/v1/tasks/:id", controller.GetTaskById)
+	r.GET("/api/v1/tasks/:url", controller.GetTaskByUrl)
 	r.POST("/api/v1/tasks", controller.CreateTask)
 	r.PATCH("/api/v1/tasks/:id", controller.ChangeTaskStatus)
 	r.PUT("/api/v1/tasks/:id", controller.EditTask)
