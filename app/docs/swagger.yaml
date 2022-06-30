@@ -93,6 +93,40 @@ info:
   title: Advanced ToDo application
   version: "1.0"
 paths:
+  /lists:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new list
+      parameters:
+      - description: Task to create
+        in: body
+        name: list
+        required: true
+        schema:
+          $ref: '#/definitions/model.List'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.List'
+        "400":
+          description: If the list is not valid.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "401":
+          description: If the user is not logged in.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "500":
+          description: If there was a db error.
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Create list
+      tags:
+      - List endpoints
   /lists/{url}:
     get:
       description: Returns all the lists the specified user has
@@ -108,9 +142,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/model.List'
-            type: array
+            $ref: '#/definitions/model.List'
         "401":
           description: If the user is not logged in.
           schema:

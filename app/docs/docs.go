@@ -23,6 +23,58 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/lists": {
+            "post": {
+                "description": "Creates a new list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "List endpoints"
+                ],
+                "summary": "Create list",
+                "parameters": [
+                    {
+                        "description": "Task to create",
+                        "name": "list",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.List"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/model.List"
+                        }
+                    },
+                    "400": {
+                        "description": "If the list is not valid.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "If the user is not logged in.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "If there was a db error.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/lists/user/{userId}": {
             "get": {
                 "description": "Returns all the lists the specified user has",
@@ -102,10 +154,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.List"
-                            }
+                            "$ref": "#/definitions/model.List"
                         }
                     },
                     "401": {

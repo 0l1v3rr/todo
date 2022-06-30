@@ -96,7 +96,7 @@ func TaskExists(id int) (Task, bool) {
 
 func CreateTask(task Task) (Task, error) {
 	// overriding the necessary values
-	task.Url = fmt.Sprintf("%s-%d", util.CreateUrlByTitle(task.Title), task.Id)
+	task.Url = fmt.Sprintf("%s-%s", util.CreateUrlByTitle(task.Title), util.GenerateHash(8))
 	task.CreatedAt = time.Now()
 
 	// creating the task in the db

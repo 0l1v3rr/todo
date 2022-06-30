@@ -87,7 +87,8 @@ func ListExists(id int) (List, bool) {
 
 func CreateList(list List) (List, error) {
 	// overriding the url
-	list.Url = fmt.Sprintf("%s-%d", util.CreateUrlByTitle(list.Name), list.Id)
+	list.Url = fmt.Sprintf("%s-%s", util.CreateUrlByTitle(list.Name), util.GenerateHash(8))
+	list.ImageId = 1
 
 	// creating the list in the db
 	tx := DB.Create(&list)

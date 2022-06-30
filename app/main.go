@@ -70,9 +70,10 @@ func main() {
 	r.PUT("/api/v1/tasks/:id", controller.EditTask)
 	r.DELETE("/api/v1/tasks/:id", controller.DeleteTask)
 
-	// list endpoint
+	// list endpoints
 	r.GET("/api/v1/lists/user/:userId", controller.GetListsByUserId)
 	r.GET("/api/v1/lists/:url", controller.GetListByUrl)
+	r.POST("/api/v1/lists", controller.CreateList)
 
 	// swagger init
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

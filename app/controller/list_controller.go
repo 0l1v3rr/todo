@@ -7,6 +7,7 @@ import (
 	"github.com/0l1v3rr/todo/app/model"
 	"github.com/0l1v3rr/todo/app/util"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 // @Summary      Get lists
@@ -86,4 +87,52 @@ func GetListByUrl(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, list)
+}
+
+// @Summary      Create list
+// @Description  Creates a new list
+// @Tags         List endpoints
+// @Accept       json
+// @Produce      json
+// @Param 		 list body model.List true "Task to create"
+// @Success      201  {object}  model.List
+// @Failure      400  {object}  util.Error "If the list is not valid."
+// @Failure      401  {object}  util.Error "If the user is not logged in."
+// @Failure      500  {object}  util.Error "If there was a db error."
+// @Router       /lists [post]
+func CreateList(c *gin.Context) {
+	// binding the list from the body
+	var list model.List
+
+	if err := c.ShouldBindBodyWith(&list, binding.JSON); err != nil {
+		c.JSON(http.StatusBadRequest, util.Error{Message: "Please provide a valid list."})
+		return
+	}
+
+	// validating the list
+	isValid, msg := list.Validate()
+	if !isValid {
+		c.JSON(http.StatusBadRequest, util.Error{Message: msg})
+		return
+	}
+
+	// checking if the user is logged in
+	user, err := model.GetLoggedInUser(*c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, util.Error{Message: "You are not logged in."})
+		return
+	}
+
+	// changing the OwnerId
+	list.OwnerId = user.Id
+
+	// creating the list
+	created, err := model.CreateList(list)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, util.Error{Message: err.Error()})
+		return
+	}
+
+	// success
+	c.JSON(http.StatusCreated, created)
 }
