@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is the API of the ToDo application",
+        "description": "This is the API of the advanced ToDo application",
         "title": "Advanced ToDo application",
         "contact": {
             "url": "https://0l1v3rr.github.io",

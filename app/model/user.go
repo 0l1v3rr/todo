@@ -1,9 +1,9 @@
 package model
 
 import (
+	"os"
 	"regexp"
 
-	"github.com/0l1v3rr/todo/app/data"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
@@ -113,7 +113,7 @@ func GetLoggedInUser(c gin.Context) (User, error) {
 		cookie.Value,
 		&jwt.StandardClaims{},
 		func(t *jwt.Token) (interface{}, error) {
-			return []byte(data.Env["JWT_SECRET"]), nil
+			return []byte(os.Getenv("JWT_SECRET")), nil
 		},
 	)
 	if err != nil {

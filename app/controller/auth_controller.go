@@ -2,10 +2,10 @@ package controller
 
 import (
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
-	"github.com/0l1v3rr/todo/app/data"
 	"github.com/0l1v3rr/todo/app/model"
 	"github.com/0l1v3rr/todo/app/util"
 	"github.com/gin-gonic/gin"
@@ -107,7 +107,7 @@ func Login(c *gin.Context) {
 	})
 
 	// creating the token from the claims
-	token, err := claims.SignedString([]byte(data.Env["JWT_SECRET"]))
+	token, err := claims.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, util.Error{Message: "Failed to log in."})
 		return

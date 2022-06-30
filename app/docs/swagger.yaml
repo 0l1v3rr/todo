@@ -86,7 +86,7 @@ info:
   contact:
     email: oliver.mrakovics@gmail.com
     url: https://0l1v3rr.github.io
-  description: This is the API of the ToDo application
+  description: This is the API of the advanced ToDo application
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT

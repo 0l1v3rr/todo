@@ -1,0 +1,34 @@
+version: '3.9'
+services:
+  mysql:
+    image: mysql:latest
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=todo
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/10-init.sql
+      - .data:/var/lib/mysql
+    networks:
+      - todo_app
+  api:
+    depends_on:
+      - mysql
+    build: ./app
+    networks:
+      - todo_app
+    ports:
+      - 8080:8080
+    environment:
+      - PORT=8080
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DOMAIN=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=todo
+      - JWT_SECRET=secret
+networks:
+  todo_app:
+    driver: bridge

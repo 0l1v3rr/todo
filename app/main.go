@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/0l1v3rr/todo/app/controller"
-	"github.com/0l1v3rr/todo/app/data"
 	_ "github.com/0l1v3rr/todo/app/docs"
 	"github.com/0l1v3rr/todo/app/model"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -29,15 +30,10 @@ import (
 // @BasePath        /api/v1
 func main() {
 	// loading the environment variables
-	err := data.GetVariables()
-	if err != nil {
-		fmt.Println("An error occurred while reading the .env file: ")
-		fmt.Println(err.Error())
-		return
-	}
+	godotenv.Load(".env")
 
 	// connecting to the db
-	err = model.Setup()
+	err := model.Setup()
 	if err != nil {
 		fmt.Println("Failed to connect to the database: ")
 		fmt.Println(err.Error())
@@ -85,5 +81,5 @@ func main() {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// running the router
-	r.Run(fmt.Sprintf(":%s", data.Env["PORT"]))
+	r.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
 }

@@ -837,7 +837,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Advanced ToDo application",
-	Description:      "This is the API of the ToDo application",
+	Description:      "This is the API of the advanced ToDo application",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }
