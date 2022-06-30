@@ -16,7 +16,7 @@ import (
 
 // @title           Advanced ToDo application
 // @version         1.0
-// @description     This is the API of the ToDo application
+// @description     This is the API of the advanced ToDo application
 
 // @contact.name	API Support
 // @contact.url 	https://0l1v3rr.github.io
@@ -74,6 +74,12 @@ func main() {
 	r.GET("/api/v1/lists/user/:userId", controller.GetListsByUserId)
 	r.GET("/api/v1/lists/:url", controller.GetListByUrl)
 	r.POST("/api/v1/lists", controller.CreateList)
+
+	// file endpoints
+	r.POST("/api/v1/files", controller.UploadFile)
+
+	// serving the static images
+	r.Static("/assets/images", "./images")
 
 	// swagger init
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

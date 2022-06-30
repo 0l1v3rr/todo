@@ -1,3 +1,6 @@
 .env
 bin/
-.vscode
+images/*.jpg
+images/*.jpeg
+images/*.png
+images/*.gif

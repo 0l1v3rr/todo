@@ -23,6 +23,44 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/files": {
+            "post": {
+                "description": "Uploads a new file into the images/ folder",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "File endpoints"
+                ],
+                "summary": "Upload file",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/util.Success"
+                        }
+                    },
+                    "400": {
+                        "description": "If the file is not valid.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "If the user is not logged in.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "If there was a file error.",
+                        "schema": {
+                            "$ref": "#/definitions/util.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/lists": {
             "post": {
                 "description": "Creates a new list",
@@ -682,9 +720,9 @@ const docTemplate = `{
                     "type": "integer",
                     "example": 1
                 },
-                "imageId": {
-                    "type": "integer",
-                    "example": 1
+                "imageURL": {
+                    "type": "string",
+                    "example": "/assets/images/hfhu39Hfeu.png"
                 },
                 "name": {
                     "type": "string",

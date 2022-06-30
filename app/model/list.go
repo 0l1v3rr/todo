@@ -7,11 +7,11 @@ import (
 )
 
 type List struct {
-	Id      int    `json:"id" gorm:"primaryKey" example:"1"`
-	OwnerId int    `json:"ownerId" gorm:"not null;column:owner_id" example:"1"`
-	ImageId int    `json:"imageId" gorm:"not null;column:image_id" example:"1"`
-	Name    string `json:"name" gorm:"not null" example:"List"`
-	Url     string `json:"url" gorm:"unique" example:"list-1"`
+	Id       int    `json:"id" gorm:"primaryKey" example:"1"`
+	OwnerId  int    `json:"ownerId" gorm:"not null;column:owner_id" example:"1"`
+	ImageUrl string `json:"imageURL" gorm:"column:image_url" example:"/assets/images/hfhu39Hfeu.png"`
+	Name     string `json:"name" gorm:"not null" example:"List"`
+	Url      string `json:"url" gorm:"unique" example:"list-1"`
 }
 
 func (list List) Validate() (bool, string) {
@@ -88,7 +88,7 @@ func ListExists(id int) (List, bool) {
 func CreateList(list List) (List, error) {
 	// overriding the url
 	list.Url = fmt.Sprintf("%s-%s", util.CreateUrlByTitle(list.Name), util.GenerateHash(8))
-	list.ImageId = 1
+	list.ImageUrl = ""
 
 	// creating the list in the db
 	tx := DB.Create(&list)

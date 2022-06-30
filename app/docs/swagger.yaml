@@ -5,9 +5,9 @@ definitions:
       id:
         example: 1
         type: integer
-      imageId:
-        example: 1
-        type: integer
+      imageURL:
+        example: /assets/images/hfhu39Hfeu.png
+        type: string
       name:
         example: List
         type: string
@@ -93,6 +93,31 @@ info:
   title: Advanced ToDo application
   version: "1.0"
 paths:
+  /files:
+    post:
+      description: Uploads a new file into the images/ folder
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/util.Success'
+        "400":
+          description: If the file is not valid.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "401":
+          description: If the user is not logged in.
+          schema:
+            $ref: '#/definitions/util.Error'
+        "500":
+          description: If there was a file error.
+          schema:
+            $ref: '#/definitions/util.Error'
+      summary: Upload file
+      tags:
+      - File endpoints
   /lists:
     post:
       consumes:

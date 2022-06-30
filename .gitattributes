@@ -1,0 +1,44 @@
+# Go
+*.go -text        diff=golang
+
+# SQL
+*.sql             linguist-detectable=true
+*.sql             linguist-language=sql
+
+# Docker
+Dockerfile        text
+
+# Web
+*.bash            text eol=lf
+*.cmd             text eol=crlf
+*.css             text diff=css
+*.html            text diff=html
+*.ini             text
+*.js              text
+*.json            text
+*.jsx             text
+*.sh              text eol=lf
+*.ts              text
+*.tsx             text
+*.xml             text
+*.xhtml           text diff=html
+
+# Docs
+*.markdown        text diff=markdown
+*.md              text diff=markdown
+
+# Config
+.env              text
+.gitattributes    text
+.gitconfig        text
+.htaccess         text
+*.cnf             text
+*.conf            text
+*.config          text
+*.lock            text -diff
+package.json      text eol=lf
+package-lock.json text -diff
+Makefile          text
+
+# Executables
+*.exe             binary
