@@ -119,6 +119,8 @@ const Login = () => {
         axios.post(`http://localhost:8080/api/v1/login`, {
             email: email,
             password: password
+        }, {
+            withCredentials: true
         })
         .then(res => {
             if(res.status === 200) {

@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -78,10 +77,6 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, util.Error{Message: "Please provide a valid user."})
 		return
 	}
-
-	fmt.Println()
-	fmt.Println(user.Email, user.Password)
-	fmt.Println()
 
 	// getting the user with the given email from the db
 	foundUser, err := model.GetUserByEmail(user.Email)

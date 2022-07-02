@@ -23,6 +23,7 @@ services:
       - 8080:8080
     environment:
       - PORT=8080
+      - FRONTEND=http://localhost:3000
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=root
       - MYSQL_DOMAIN=mysql
