@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { VscKey, VscMail } from "react-icons/vsc";
+import { useNavigate, Link } from "react-router-dom";
 
 import axios, { AxiosError } from "axios";
 
@@ -12,6 +13,8 @@ type Settings = {
 }
 
 const Login = () => {
+    let navigate = useNavigate();
+
     const [isBtnActive, setIsBtnActive] = useState(false);
     const [requestError, setRequestError] = useState("");
 
@@ -118,9 +121,8 @@ const Login = () => {
             password: password
         })
         .then(res => {
-            console.log(res);
             if(res.status === 200) {
-                // handle successful login
+                navigate("/");
             }
         })
         .catch(err => {
@@ -163,6 +165,13 @@ const Login = () => {
                     settings={passwordSettings}
                     validate={validatePassword}
                 />
+
+                <div className="text-sm text-slate-700">
+                    Don't have an account? Register&nbsp;
+                    <span className="text-blue-700 cursor-pointer transition-all duration-300 hover:text-blue-500">
+                        <Link to="/register">here</Link>
+                    </span>!
+                </div>
 
                 <ButtonPrimary 
                     isActive={isBtnActive} 

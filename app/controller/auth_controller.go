@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -71,12 +72,16 @@ func Register(c *gin.Context) {
 // @Router       /login [post]
 func Login(c *gin.Context) {
 	// binding the user from the body
-	var user model.User
+	var user model.LoginUser
 
 	if err := c.ShouldBindBodyWith(&user, binding.JSON); err != nil {
 		c.JSON(http.StatusBadRequest, util.Error{Message: "Please provide a valid user."})
 		return
 	}
+
+	fmt.Println()
+	fmt.Println(user.Email, user.Password)
+	fmt.Println()
 
 	// getting the user with the given email from the db
 	foundUser, err := model.GetUserByEmail(user.Email)
