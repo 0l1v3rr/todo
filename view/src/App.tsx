@@ -1,7 +1,7 @@
 import Home from "./pages/Home";
 
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import axios from "axios";
@@ -24,6 +24,7 @@ const App = () => {
             .then(res => setLoggedInUser(res.data))
             .catch(() => {});
 
+        console.log("SADSAD")
         setIsLoaded(true);
     })();
   }, []);
@@ -33,7 +34,11 @@ const App = () => {
         <Router>
             <Routes>
                 <Route path="/" element={
-                    isLoaded ? (loggedInUser == null ? <Login /> : <Home />) : <Loading />
+                    isLoaded ? 
+                        (loggedInUser == null ? 
+                            <Login /> : 
+                            <Home user={loggedInUser} />
+                        ) :  <Loading />
                 } />
 
                 <Route path="/register" element={

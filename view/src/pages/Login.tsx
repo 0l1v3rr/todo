@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import { VscKey, VscMail } from "react-icons/vsc";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import axios, { AxiosError } from "axios";
 
@@ -12,9 +12,7 @@ type Settings = {
     errorMessage: string
 }
 
-const Login = () => {
-    let navigate = useNavigate();
-
+const Login:FC = () => {
     const [isBtnActive, setIsBtnActive] = useState(false);
     const [requestError, setRequestError] = useState("");
 
@@ -116,6 +114,7 @@ const Login = () => {
 
     // handle form submit function
     const handleFormSubmit = (): void => {
+        setIsBtnActive(false);
         axios.post(`http://localhost:8080/api/v1/login`, {
             email: email,
             password: password
@@ -124,7 +123,7 @@ const Login = () => {
         })
         .then(res => {
             if(res.status === 200) {
-                navigate("/");
+                window.location.reload();
             }
         })
         .catch(err => {
