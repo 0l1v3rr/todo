@@ -24,7 +24,6 @@ const App = () => {
             .then(res => setLoggedInUser(res.data))
             .catch(() => {});
 
-        console.log("SADSAD")
         setIsLoaded(true);
     })();
   }, []);

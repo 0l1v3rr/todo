@@ -38,7 +38,7 @@ const InputField:FC<InputProps> = (props) => {
                     placeholder={props.placeholder}
                     value={props.value}
                     className={`px-2 py-1 outline-none h-9 bg-slate-50 rounded-tr-md rounded-br-md w-full 
-                        border border-solid  text-base placeholder:text-slate-600 transition-all duration-300
+                        border border-solid  text-base placeholder:text-slate-500 transition-all duration-300
                         ${!currentSettings.isError ? `focus:border-blue-500 active:border-blue-500 
                             border-slate-200` : `focus:border-red-500 active:border-red-500 
                             border-red-500`}`}

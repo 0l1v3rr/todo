@@ -45,6 +45,7 @@ func Register(c *gin.Context) {
 	exists := model.ExistsByEmail(user.Email)
 	if exists {
 		c.JSON(http.StatusConflict, util.Error{Message: "This email is already registered."})
+		return
 	}
 
 	// creating the user with the model

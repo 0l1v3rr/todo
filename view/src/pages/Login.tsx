@@ -115,6 +115,8 @@ const Login:FC = () => {
     // handle form submit function
     const handleFormSubmit = (): void => {
         setIsBtnActive(false);
+        setRequestError("");
+        
         axios.post(`http://localhost:8080/api/v1/login`, {
             email: email,
             password: password

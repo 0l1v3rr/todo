@@ -25,9 +25,9 @@ type LoginUser struct {
 }
 
 func (user User) Validate() (bool, string) {
-	// if the length of the username is less than 8 characters
-	if len(user.Name) < 8 {
-		return false, "Your name has to be at least 8 characters long."
+	// if the length of the username is less than 6 characters
+	if len(user.Name) < 6 {
+		return false, "Your name has to be at least 6 characters long."
 	}
 
 	// if the length of the username is more than 64 characters
