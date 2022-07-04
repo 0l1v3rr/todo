@@ -33,11 +33,7 @@ const App = () => {
         <Router>
             <Routes>
                 <Route path="/" element={
-                    isLoaded ? 
-                        (loggedInUser == null ? 
-                            <Login /> : 
-                            <Home user={loggedInUser} />
-                        ) :  <Loading />
+                    isLoaded ? (loggedInUser == null ? <Login /> : <Home user={loggedInUser} />) : <Loading />
                 } />
 
                 <Route path="/register" element={

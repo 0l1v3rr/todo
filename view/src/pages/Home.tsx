@@ -1,5 +1,6 @@
 import { FC } from "react";
 import Header from "../components/Header";
+import Lists from "../components/Lists";
 
 interface User {
     id: number,
@@ -14,9 +15,9 @@ interface HomeProps {
 
 const Home:FC<HomeProps> = (props) => {
     return (
-        <div className="w-fit">
+        <div className="w-fit flex flex-col gap-2">
             <Header username={props.user?.name} />
-            Home content
+            <Lists userId={props.user?.id} />
         </div>
     );
 }

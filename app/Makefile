@@ -7,7 +7,7 @@ swagger:
 build:
 	go build -o .$(BIN)/$(APP) main.go
 
-bin:
+brun:
 	.$(BIN)/$(APP)
 
 clean:
