@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, FC, SetStateAction, useState, useId } from "react";
 import { IconType } from "react-icons/lib";
 
 type Settings = {
@@ -20,9 +20,11 @@ interface InputProps {
 const InputField:FC<InputProps> = (props) => {
     const [currentSettings, setCurrentSettings] = useState<Settings>(props.settings);
 
+    const id = useId();
+
     return (
         <div className="flex flex-col gap-1 w-full text-base">
-            <label className="text-md">{props.label}</label>
+            {props.label != "" && <label htmlFor={id} className="text-md">{props.label}</label>}
 
             <div className="flex gap-0">
                 <div className="h-9 bg-slate-50 rounded-tl-md rounded-bl-md border border-solid 
@@ -34,6 +36,7 @@ const InputField:FC<InputProps> = (props) => {
                         props.setValue(e.target.value);
                         setCurrentSettings(props.validate(e.target.value));
                     }}
+                    id={id}
                     type={props.type} 
                     placeholder={props.placeholder}
                     value={props.value}

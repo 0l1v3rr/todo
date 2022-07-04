@@ -92,7 +92,7 @@ const Register:FC<RegisterProps> = (props) => {
             return nameSettings;
         }
 
-        // if the value is less than 6 characters long
+        // if the value is more than 6 characters long
         if(value.length > 64) {
             setNameSettings({
                 isError: true,
