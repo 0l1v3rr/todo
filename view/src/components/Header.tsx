@@ -8,7 +8,7 @@ interface HeaderProps {
 
 const Header:FC<HeaderProps> = (props) => {
     const handleLogoutClick = () => {
-        axios.post(`http://localhost:8080/api/v1/logout`, null, { withCredentials: true });
+        axios.post(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/logout`, null, { withCredentials: true });
         window.location.reload();
     };
     

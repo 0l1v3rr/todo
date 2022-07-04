@@ -117,7 +117,7 @@ const Login:FC = () => {
         setIsBtnActive(false);
         setRequestError("");
         
-        axios.post(`http://localhost:8080/api/v1/login`, {
+        axios.post(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/login`, {
             email: email,
             password: password
         }, {

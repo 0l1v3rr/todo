@@ -7,6 +7,9 @@ swagger:
 build:
 	go build -o .$(BIN)/$(APP) main.go
 
+bin:
+	.$(BIN)/$(APP)
+
 clean:
 ifeq ($(OS),Windows_NT)
 	rm $(BIN)

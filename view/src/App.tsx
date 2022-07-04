@@ -20,7 +20,7 @@ const App = () => {
 
   useEffect(() => {
     (async () => {
-        await axios.get(`http://localhost:8080/api/v1/user`, { withCredentials: true })
+        await axios.get(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/user`, { withCredentials: true })
             .then(res => setLoggedInUser(res.data))
             .catch(() => {});
 

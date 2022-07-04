@@ -183,7 +183,7 @@ const Register:FC<RegisterProps> = (props) => {
         setIsBtnActive(false);
         setRequestError("");
         
-        axios.post(`http://localhost:8080/api/v1/register`, {
+        axios.post(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/register`, {
             name: name,
             email: email,
             password: password
