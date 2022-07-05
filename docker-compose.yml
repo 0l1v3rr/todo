@@ -30,6 +30,16 @@ services:
       - MYSQL_PORT=3306
       - MYSQL_DATABASE=todo
       - JWT_SECRET=secret
+  client:
+    depends_on:
+      - mysql
+      - api
+    stdin_open: true
+    ports:
+      - 3000:3000
+    build: ./view
+    networks:
+      - todo_app
 networks:
   todo_app:
     driver: bridge
