@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import axios from "axios";
 import Loading from "./pages/Loading";
+import ListPage from "./pages/ListPage";
 
 interface User {
     id: number,
@@ -29,20 +30,24 @@ const App = () => {
   }, []);
 
   return (
-    <div className="w-screen min-h-screen flex items-center justify-center bg-slate-50 text-slate-800">
-        <Router>
-            <Routes>
-                <Route path="/" element={
-                    isLoaded ? (loggedInUser == null ? <Login /> : <Home user={loggedInUser} />) : <Loading />
-                } />
+        <div className="w-screen min-h-screen flex items-center justify-center bg-slate-50 text-slate-800">
+            <Router>
+                <Routes>
+                    <Route path="/" element={
+                        isLoaded ? (loggedInUser == null ? <Login /> : <Home user={loggedInUser} />) : <Loading />
+                    } />
 
-                <Route path="/register" element={
-                    isLoaded ? <Register user={loggedInUser} /> : <Loading />
-                } />
-            </Routes>
-        </Router>
-    </div>
-  );
+                    <Route path="/register" element={
+                        isLoaded ? <Register user={loggedInUser} /> : <Loading />
+                    } />
+
+                    <Route path="/lists/:listUrl" element={
+                        isLoaded ? <ListPage user={loggedInUser} /> : <Loading />
+                    } />
+                </Routes>
+            </Router>
+        </div>
+    );
 }
 
 export default App;
