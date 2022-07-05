@@ -2,6 +2,7 @@ import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
+import ListNavbar from "../components/ListNavbar";
 import TaskItem from "../components/TaskItem";
 import { List, Task } from "../types";
 
@@ -47,6 +48,8 @@ const ListPage:FC<ListPageProps> = (props) => {
     return (
         <div className="w-fit flex flex-col gap-2">
             <Header username={props.user?.name} />
+
+            <ListNavbar />
 
             <div className="flex flex-col items-center justify-between shadow-md bg-slate-100 
                 border border-solid border-slate-200 rounded-md py-2 px-4 w-full">
