@@ -44,12 +44,23 @@ const ListPage:FC<ListPageProps> = (props) => {
             ).then((res) => setTasks(res.data)).catch(() => setTasks([]));
         }
     }, [currentList]);
+
+    const createTask = async (name: string, description: string) => {
+        axios.post(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/tasks`, {
+            title: name,
+            description: description,
+            isDone: false,
+            listId: currentList?.id
+        }, {
+            withCredentials: true
+        }).then((res) => setTasks(current => [res.data, ...current])).catch(err => console.log(err));
+    }
     
     return (
         <div className="w-fit flex flex-col gap-2">
             <Header username={props.user?.name} />
 
-            <ListNavbar />
+            <ListNavbar createTask={createTask} />
 
             <div className="flex flex-col items-center justify-between shadow-md bg-slate-100 
                 border border-solid border-slate-200 rounded-md py-2 px-4 w-full">
