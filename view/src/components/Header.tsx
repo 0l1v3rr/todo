@@ -1,5 +1,6 @@
 import axios from "axios";
 import { FC } from "react";
+import { useNavigate } from "react-router-dom";
 import ButtonPrimary from "./ButtonPrimary";
 
 interface HeaderProps {
@@ -7,8 +8,11 @@ interface HeaderProps {
 }
 
 const Header:FC<HeaderProps> = (props) => {
+    const navigate = useNavigate();
+
     const handleLogoutClick = () => {
         axios.post(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/logout`, null, { withCredentials: true });
+        navigate("/");
         window.location.reload();
     };
     
