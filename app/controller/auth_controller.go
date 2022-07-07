@@ -56,6 +56,7 @@ func Register(c *gin.Context) {
 	}
 
 	// return with json
+	created.Password = ""
 	c.JSON(http.StatusCreated, created)
 }
 
@@ -146,6 +147,7 @@ func GetLoggedInUser(c *gin.Context) {
 	}
 
 	// if the user is logged in
+	user.Password = ""
 	c.JSON(http.StatusOK, user)
 }
 

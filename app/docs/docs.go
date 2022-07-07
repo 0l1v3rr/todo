@@ -806,6 +806,10 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "John Doe"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "secret"
                 }
             }
         },

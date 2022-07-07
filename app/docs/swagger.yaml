@@ -68,6 +68,9 @@ definitions:
       name:
         example: John Doe
         type: string
+      password:
+        example: secret
+        type: string
     type: object
   util.Error:
     properties:

@@ -14,7 +14,7 @@ type User struct {
 	Id        int    `json:"id" gorm:"primaryKey" example:"1"`
 	Name      string `json:"name" gorm:"not null" example:"John Doe"`
 	Email     string `json:"email" gorm:"not null;unique" example:"johndoe@gmail.com"`
-	Password  string `json:"-" gorm:"not null;column:password" example:"secret"`
+	Password  string `json:"password,omitempty" gorm:"not null;column:password" example:"secret"`
 	IsEnabled bool   `json:"isEnabled" gorm:"not null;column:is_enabled" example:"true"`
 }
 
